@@ -44,7 +44,7 @@ func (r *userRepo) Create(user *pb.User) (*pb.User, error) {
 	return &respUser, nil
 }
 
-func (r *userRepo) Update(user *pb.UserRequest) (*pb.User, error) {
+func (r *userRepo) Update(user *pb.User) (*pb.User, error) {
 	query := `
 	UPDATE 
 		users 
@@ -61,9 +61,9 @@ func (r *userRepo) Update(user *pb.UserRequest) (*pb.User, error) {
 	var respUser pb.User
 	err := r.db.QueryRow(
 		query,
-		"New Name",
-		"New Last Name",
-		user.UserId,
+		user.Name,
+		user.LastName,
+		user.Id,
 	).Scan(
 		&respUser.Id,
 		&respUser.Name,

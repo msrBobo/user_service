@@ -32,8 +32,8 @@ func (s *UserService) Create(ctx context.Context, req *pb.User) (*pb.User, error
 	return user, nil
 }
 
-func (s *UserService) Update(ctx context.Context, req *pb.UserRequest) (*pb.User, error) {
-	user, err := s.storage.User().Update(req)
+func (s *UserService) Update(ctx context.Context, user *pb.User) (*pb.User, error) {
+	user, err := s.storage.User().Update(user)
 	if err != nil {
 		return nil, err
 	}

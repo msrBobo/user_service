@@ -1,24 +1,17 @@
-DB_URL := "postgres://postgres:1234@localhost:5432/userdb?sslmode=disable"
-
 CURRENT_DIR=$(shell pwd)
-
-build:
-	CGO_ENABLED=0 GOOS=linux go build -mod=vendor -a -installsuffix cgo -o ${CURRENT_DIR}/bin/${APP} ${APP_CMD_DIR}/main.go
+DB_URL := "postgres://postgres:bobo@localhost:5432/userdb?sslmode=disable"
 
 proto-gen:
-	protoc --go_out=genproto --go-grpc_out=genproto protos/user.proto	
-	
-run:
-	go run cmd/main.go
-
+	chmod +x ./scripts/genproto.sh
+	./scripts/genproto.sh
 migrate-up:
-    migrate -path migrations -database "$(DB_URL)" -verbose up
+	migrate -path migrations -database "$(DB_URL)" -verbose up
 
 migrate-down:
-    migrate -path migrations -database "$(DB_URL)" -verbose down
+	migrate -path migrations -database "$(DB_URL)" -verbose down
 
-migrate_file:
-    migrate create -ext sql -dir migrations/ -seq users
+migrate-force:
+	migrate -path migrations -database "$(DB_URL)" -verbose force 1
 
-migrate-dirty:
-	migrate -path ./migrations/ -database "postgresql://postgres:1234@localhost:5432/userdb?sslmode=disable" force 1
+migrate-file:
+	migrate create -ext sql -dir migrations/ -seq create_comments_table
